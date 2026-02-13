@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>महाशिवरात्रि शुभकामना लिंक</title>
+  <meta name="theme-color" content="#0b1320" />
+  <style>
+    :root{
+      --bg1:#050814;
+      --bg2:#081a2a;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.09);
+      --stroke: rgba(255,255,255,.14);
+      --text:#eaf3ff;
+      --muted: rgba(234,243,255,.72);
+      --muted2: rgba(234,243,255,.55);
+      --accent1:#4fd1ff;
+      --accent2:#a78bfa;
+      --accent3:#ffb86b;
+      --good:#56f39a;
+      --bad:#ff6b6b;
+      --shadow: 0 22px 70px rgba(0,0,0,.45);
+      --radius: 28px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Devanagari", Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 900px at 20% 10%, rgba(79,209,255,.22), transparent 55%),
+        radial-gradient(900px 900px at 80% 20%, rgba(167,139,250,.18), transparent 55%),
+        radial-gradient(900px 900px at 50% 90%, rgba(255,184,107,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow:hidden; /* FIX PAGE */
+    }
+
+    /* soft animated background */
+    .bg{
+      position:fixed; inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      filter: saturate(1.05);
+    }
+    .orb{
+      position:absolute;
+      width:420px; height:420px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(79,209,255,.26), rgba(167,139,250,.10), transparent 62%);
+      animation: floaty 12s ease-in-out infinite;
+      mix-blend-mode: screen;
+      opacity:.9;
+    }
+    .orb.o2{
+      width:520px; height:520px;
+      background: radial-gradient(circle at 30% 30%, rgba(167,139,250,.22), rgba(255,184,107,.08), transparent 62%);
+      animation-duration: 16s;
+      opacity:.75;
+    }
+    .orb.o3{
+      width:560px; height:560px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,184,107,.16), rgba(79,209,255,.08), transparent 62%);
+      animation-duration: 18s;
+      opacity:.55;
+    }
+    @keyframes floaty{
+      0%,100%{transform: translate3d(-4%, -2%, 0) scale(1)}
+      50%{transform: translate3d(5%, 4%, 0) scale(1.03)}
+    }
+
+    /* Confetti / flowers / fireworks layer */
+    .fx{
+      position:fixed; inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:3;
+    }
+    .petal, .spark{
+      position:absolute;
+      top:-12vh;
+      font-size: 18px;
+      opacity: .85;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.35));
+      animation: fall linear infinite;
+    }
+    .petal{ font-size: 18px; }
+    .spark{ font-size: 16px; opacity:.75; }
+    @keyframes fall{
+      0%{ transform: translate3d(0,-12vh,0) rotate(0deg); opacity:0}
+      8%{opacity:.9}
+      100%{ transform: translate3d(var(--dx), 112vh, 0) rotate(360deg); opacity:0}
+    }
+
+    /* small burst fireworks */
+    .burst{
+      position:absolute;
+      width:10px;height:10px;
+      border-radius:50%;
+      background: radial-gradient(circle, rgba(255,255,255,.9), rgba(255,255,255,0));
+      opacity:.0;
+      animation: burst 3.6s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(79,209,255,.25));
+    }
+    .burst::before, .burst::after{
+      content:"";
+      position:absolute; inset:-22px;
+      border-radius:50%;
+      border:1px solid rgba(79,209,255,.18);
+      transform: scale(.35);
+      opacity:.0;
+      animation: ring 3.6s ease-in-out infinite;
+    }
+    .burst::after{
+      inset:-34px;
+      border-color: rgba(167,139,250,.18);
+      animation-delay: .2s;
+    }
+    @keyframes burst{
+      0%,45%{transform: scale(.2); opacity:0}
+      55%{opacity:1}
+      70%{transform: scale(1.2); opacity:.0}
+      100%{opacity:0}
+    }
+    @keyframes ring{
+      0%,45%{transform: scale(.25); opacity:0}
+      58%{opacity:1}
+      72%{transform: scale(1.15); opacity:0}
+      100%{opacity:0}
+    }
+
+    /* Layout */
+    .wrap{
+      position:relative;
+      z-index:5;
+      height:100dvh;
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 14px;
+    }
+
+    .card{
+      width:min(460px, 100%);
+      height: min(860px, 100dvh - 28px);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      overflow:hidden;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 320px at 50% 0%, rgba(79,209,255,.16), transparent 65%),
+        radial-gradient(500px 320px at 10% 30%, rgba(167,139,250,.12), transparent 65%),
+        radial-gradient(500px 320px at 90% 40%, rgba(255,184,107,.10), transparent 65%);
+      pointer-events:none;
+      opacity:.95;
+    }
+
+    .content{
+      position:relative;
+      z-index:2;
+      padding: 18px 18px 16px;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .pill{
+      align-self:center;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: rgba(234,243,255,.92);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent1);
+      box-shadow: 0 0 0 6px rgba(79,209,255,.12);
+    }
+
+    h1{
+      margin:0;
+      text-align:center;
+      font-size: 36px;
+      line-height:1.05;
+      letter-spacing:.2px;
+      text-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+    .sub{
+      margin:0;
+      text-align:center;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .decoRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 0 6px;
+      margin-top: 2px;
+    }
+    .deco{
+      font-size: 44px;
+      filter: drop-shadow(0 16px 24px rgba(0,0,0,.35));
+      opacity:.95;
+      transform-origin:center;
+      animation: decoFloat 3.8s ease-in-out infinite;
+    }
+    .deco.d2{animation-delay:.35s}
+    @keyframes decoFloat{
+      0%,100%{transform: translateY(0) rotate(-2deg) scale(1)}
+      50%{transform: translateY(10px) rotate(2deg) scale(1.02)}
+    }
+
+    /* Lingam */
+    .lingamWrap{
+      position:relative;
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    .halo{
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(79,209,255,.45), rgba(167,139,250,.18), transparent 62%);
+      filter: blur(.2px);
+      opacity: .95;
+      animation: halo 4.2s ease-in-out infinite;
+    }
+    @keyframes halo{
+      0%,100%{transform: scale(1); filter: blur(.2px)}
+      50%{transform: scale(1.04); filter: blur(.5px)}
+    }
+    .lingam{
+      position:absolute;
+      width: 120px;
+      height: 150px;
+      border-radius: 60px 60px 50px 50px;
+      background: linear-gradient(180deg, #0a0f1b, #060a12);
+      box-shadow:
+        inset 0 16px 30px rgba(255,255,255,.05),
+        inset 0 -20px 30px rgba(0,0,0,.55),
+        0 26px 55px rgba(0,0,0,.35);
+      transform: translateY(6px);
+      animation: lingamFloat 3.6s ease-in-out infinite;
+    }
+    @keyframes lingamFloat{
+      0%,100%{transform: translateY(6px)}
+      50%{transform: translateY(0px)}
+    }
+    .top{
+      position:absolute;
+      width: 150px;
+      height: 56px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #0b1220, #070b14);
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: inset 0 10px 18px rgba(255,255,255,.04);
+    }
+    .base{
+      position:absolute;
+      width: 210px;
+      height: 44px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #0b1220, #070b14);
+      bottom: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow:
+        inset 0 10px 18px rgba(255,255,255,.04),
+        0 24px 55px rgba(0,0,0,.35);
+    }
+
+    /* Triple tilak */
+    .tilak{
+      position:absolute;
+      left:50%;
+      top: 62px;
+      transform: translateX(-50%);
+      width: 64px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      align-items:center;
+    }
+    .tilak span{
+      display:block;
+      width: 64px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.18), rgba(255,255,255,.08));
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 18px rgba(0,0,0,.25);
+      opacity:.92;
+    }
+    .tilak i{
+      display:block;
+      width: 14px;
+      height: 20px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ffd27a, #ffb86b);
+      box-shadow: 0 10px 20px rgba(255,184,107,.22);
+      margin-top: 1px;
+    }
+
+    .quote{
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 14px 14px;
+      text-align:center;
+      color: rgba(234,243,255,.86);
+      line-height: 1.45;
+    }
+    .quote b{color: rgba(234,243,255,.95)}
+
+    /* Form */
+    .panel{
+      margin-top: 6px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .stepDots{
+      display:flex;
+      justify-content:center;
+      gap: 6px;
+      margin-bottom: 2px;
+      opacity:.95;
+    }
+    .stepDots span{
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(234,243,255,.22);
+      transition: all .25s ease;
+    }
+    .stepDots span.on{
+      width: 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      box-shadow: 0 10px 20px rgba(79,209,255,.18);
+    }
+
+    label{
+      display:block;
+      font-weight: 800;
+      color: rgba(234,243,255,.92);
+      margin-bottom: 6px;
+    }
+    .hint{
+      font-size: 12px;
+      color: var(--muted2);
+      margin-top: 6px;
+      text-align:center;
+    }
+    input{
+      width:100%;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      padding: 14px 14px;
+      font-size: 16px;
+      outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    input::placeholder{color: rgba(234,243,255,.40)}
+    input:focus{
+      border-color: rgba(79,209,255,.35);
+      box-shadow: 0 0 0 6px rgba(79,209,255,.10);
+    }
+
+    .row{
+      display:flex;
+      gap: 10px;
+    }
+    .btn{
+      width:100%;
+      border:0;
+      border-radius: 18px;
+      padding: 14px 14px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      color: rgba(10,16,28,.95);
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      box-shadow: 0 18px 45px rgba(79,209,255,.12);
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+    }
+    .btn:active{transform: scale(.99)}
+    .btn.secondary{
+      background: rgba(255,255,255,.07);
+      color: rgba(234,243,255,.92);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow:none;
+    }
+    .btn .shine{
+      position:absolute;
+      inset:-30%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      transform: translateX(-120%) rotate(12deg);
+      animation: shine 2.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes shine{
+      0%,60%{transform: translateX(-120%) rotate(12deg)}
+      100%{transform: translateX(120%) rotate(12deg)}
+    }
+
+    /* Footer bar */
+    .footerBar{
+      margin-top:auto;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 900;
+      color: rgba(234,243,255,.92);
+      user-select:none;
+    }
+    .knob{
+      width: 42px; height: 22px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.12);
+      position:relative;
+    }
+    .knob::after{
+      content:"";
+      position:absolute;
+      top:2px; left:2px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.9);
+      transition: all .22s ease;
+    }
+    .knob.on{
+      background: rgba(86,243,154,.18);
+      border-color: rgba(86,243,154,.22);
+    }
+    .knob.on::after{left: 21px; background: #56f39a}
+
+    .small{
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    /* view modes */
+    .hide{display:none !important}
+
+    /* Ensure no overlay: animations behind card */
+    .fx{z-index:2}
+    .wrap{z-index:5}
+
+    /* Mobile only (optional) */
+    @media (min-width: 900px){
+      body::after{
+        content:"यह पेज मोबाइल के लिए डिज़ाइन है।";
+        position:fixed; inset:auto 0 16px 0;
+        text-align:center;
+        color: rgba(234,243,255,.55);
+        font-weight:700;
+        letter-spacing:.2px;
+        font-size: 12px;
+        pointer-events:none;
+      }
+    }
+  
+    /* Name animations in greeting */
+    #fromName{
+      display:inline-block;
+      font-weight: 1000;
+      letter-spacing: .4px;
+      background: linear-gradient(90deg, rgba(79,209,255,1), rgba(167,139,250,1), rgba(255,184,107,1));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 18px 45px rgba(0,0,0,.35);
+      filter: drop-shadow(0 10px 22px rgba(79,209,255,.14));
+      animation: nameGlow 2.2s ease-in-out infinite;
+    }
+    @keyframes nameGlow{
+      0%,100%{ transform: translateY(0) scale(1); filter: drop-shadow(0 10px 22px rgba(79,209,255,.14)); }
+      50%{ transform: translateY(-2px) scale(1.02); filter: drop-shadow(0 16px 30px rgba(167,139,250,.18)); }
+    }
+
+    .typing{
+      display:inline-block;
+      overflow:hidden;
+      white-space:nowrap;
+      border-right: 2px solid rgba(234,243,255,.55);
+      animation: typing 1.6s steps(18,end) both, caret 0.8s step-end infinite;
+      max-width: 92%;
+      vertical-align:bottom;
+    }
+    @keyframes typing{
+      from{ width:0; }
+      to{ width:100%; }
+    }
+    @keyframes caret{
+      0%,100%{ border-color: transparent; }
+      50%{ border-color: rgba(234,243,255,.55); }
+    }
+
+    .bounceIn{
+      animation: bounceIn 0.9s cubic-bezier(.2,.9,.2,1) both;
+    }
+    @keyframes bounceIn{
+      0%{ transform: translateY(10px) scale(.92); opacity:0; }
+      60%{ transform: translateY(-3px) scale(1.03); opacity:1; }
+      100%{ transform: translateY(0) scale(1); opacity:1; }
+    }
+
+</style>
+</head>
+<body>
+
+  <div class="bg">
+    <div class="orb" style="left:-120px; top:-120px;"></div>
+    <div class="orb o2" style="right:-200px; top:-90px;"></div>
+    <div class="orb o3" style="left:-200px; bottom:-260px;"></div>
+  </div>
+
+  <!-- Full-screen animations -->
+  <div class="fx" id="fx"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="content">
+
+        <div class="pill"><span class="dot"></span> Har Har Mahadev</div>
+
+        <h1>महाशिवरात्रि की<br/>हार्दिक शुभकामनाएं</h1>
+        <p class="sub">इस पेज से अपना नाम डालकर एक सुंदर शुभकामना लिंक बनाएं और शेयर करें।</p>
+
+        <div class="decoRow">
+          <div class="deco" aria-hidden="true">🔱</div>
+          <div class="deco d2" aria-hidden="true">🥁</div>
+        </div>
+
+        <div class="lingamWrap" aria-hidden="true">
+          <div class="halo"></div>
+          <div class="lingam">
+            <div class="top"></div>
+            <div class="tilak">
+              <span></span><span></span><span></span>
+              <i></i>
+            </div>
+            <div class="base"></div>
+          </div>
+        </div>
+
+        <div class="quote">
+          <b>“ॐ नमः शिवाय”</b><br/>
+          शिव की भक्ति से मन को शांति और जीवन को नई दिशा मिलती है।
+        </div>
+
+        <!-- FORM PANEL -->
+        <div class="panel" id="panelForm">
+
+          <div class="stepDots" aria-hidden="true">
+            <span id="d1" class="on"></span>
+            <span id="d2"></span>
+          </div>
+
+          <!-- Step 1: Name -->
+          <div id="step1">
+            <label for="name">1) अपना नाम लिखें</label>
+            <input id="name" autocomplete="name" inputmode="text" placeholder="उदाहरण: Rahul / Mayank / Divya" />
+            <button class="btn" id="btnNext">
+              <span class="shine"></span>
+              ➡️ Next
+            </button>
+            <div class="hint">पहले अपना नाम डालें, फिर Next करें</div>
+          </div>
+
+          <!-- Step 2: Mobile (optional) -->
+          <div id="step2" class="hide">
+            <label for="mobile">2) मोबाइल नंबर (Optional)</label>
+            <input id="mobile" autocomplete="tel" inputmode="numeric" placeholder="उदाहरण: 9876543210" maxlength="10" />
+            <button class="btn" id="btnMake">
+              <span class="shine"></span>
+              🔗 Link बनाएं
+            </button>
+            <button class="btn secondary" id="btnBack">⬅️ Back</button>
+            <div class="hint">Note: मोबाइल नंबर optional है। (दूसरे व्यक्ति को नहीं दिखेगा)</div>
+          </div>
+
+        </div>
+
+        <!-- Share panel -->
+        <div class="panel hide" id="panelShare">
+          <div style="text-align:center; font-weight:900; font-size:16px; color:rgba(234,243,255,.92)">
+            🎉 आपकी शुभकामना लिंक तैयार है 🎉
+          </div>
+
+          <input id="shareLink" readonly />
+          <div class="row">
+            <button class="btn" id="btnShare">
+              <span class="shine"></span>
+              📤 Share
+            </button>
+            <button class="btn secondary" id="btnCopy">📋 Copy</button>
+          </div>
+
+          <div class="hint">जो भी यह लिंक खोलेगा, उसे केवल आपका नाम दिखेगा।</div>
+
+          <button class="btn secondary" id="btnAgain">🔁 फिर से बनाएं</button>
+        </div>
+
+        <!-- Greeting view -->
+        <div class="panel hide" id="panelGreeting">
+          <div style="text-align:center; font-weight:900; font-size:15px; color:rgba(234,243,255,.92)">
+            ✨ <span id="fromName" class="typing"></span> की तरफ से आपको ✨
+          </div>
+          <div style="text-align:center; font-weight:900; font-size:18px; margin-top:4px">
+            महाशिवरात्रि की हार्दिक शुभकामनाएं 🙏🔱
+          </div>
+          <div class="hint">आप भी अपना नाम डालकर लिंक बनाएं और शेयर करें।</div>
+          <button class="btn" id="btnCreateMine">
+            <span class="shine"></span>
+            🧾 अपना नाम डालें
+          </button>
+        </div>
+
+        <div class="footerBar">
+          <div class="toggle" id="toggleMusic">
+            <span style="opacity:.9">🟡</span>
+            <span>Bhajan: <span id="musicState">OFF</span></span>
+          </div>
+          <div class="small">Tap for Bhajan 🎵</div>
+          <div class="knob" id="knob"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgm" preload="auto" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_3a4f0f2d77.mp3?filename=indian-flute-ambient-121334.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ===== Helpers =====
+
+    // Name animation refresh (typing + bounce)
+    function animateName(){
+      const el = document.getElementById("fromName");
+      const panel = document.getElementById("panelGreeting");
+      if(panel) panel.classList.add("bounceIn");
+      if(!el) return;
+      // restart typing animation
+      el.classList.remove("typing");
+      void el.offsetWidth;
+      el.classList.add("typing");
+    }
+
+    const $ = (id)=>document.getElementById(id);
+
+    function safeText(s){
+      s = (s||"").toString().trim();
+      s = s.replace(/[<>]/g,"");
+      if(s.length > 40) s = s.slice(0,40);
+      return s;
+    }
+
+    function blurAll(){
+      try{ document.activeElement && document.activeElement.blur && document.activeElement.blur(); }catch(e){}
+    }
+
+    // ===== Animations (flowers + sparkles + fireworks) =====
+    const fx = $("fx");
+    const PETALS = ["🌸","🌺","💮","🌼","🌷","✨","🪔","⭐","🕉️"];
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    function spawnPetal(){
+      const el = document.createElement("div");
+      const isSpark = Math.random() < 0.32;
+      el.className = isSpark ? "spark" : "petal";
+      el.textContent = PETALS[Math.floor(Math.random()*PETALS.length)];
+      const left = rand(2, 98);
+      const dx = (rand(-18, 18)).toFixed(1) + "vw";
+      const dur = rand(8, 14).toFixed(2) + "s";
+      const delay = rand(0, 3).toFixed(2) + "s";
+      el.style.left = left + "vw";
+      el.style.setProperty("--dx", dx);
+      el.style.animationDuration = dur;
+      el.style.animationDelay = delay;
+      el.style.opacity = isSpark ? rand(.45,.85) : rand(.55,.95);
+      el.style.fontSize = (isSpark ? rand(14,18) : rand(16,22)).toFixed(0) + "px";
+      fx.appendChild(el);
+      setTimeout(()=>el.remove(), (parseFloat(dur)+parseFloat(delay)+1)*1000);
+    }
+
+    function spawnBurst(){
+      const b = document.createElement("div");
+      b.className = "burst";
+      b.style.left = rand(8, 92) + "vw";
+      b.style.top = rand(10, 58) + "vh";
+      b.style.animationDelay = rand(0, 2.2).toFixed(2) + "s";
+      fx.appendChild(b);
+      setTimeout(()=>b.remove(), 5200);
+    }
+
+    // Start FX
+    for(let i=0;i<22;i++) spawnPetal();
+    setInterval(spawnPetal, 520);
+    for(let i=0;i<5;i++) spawnBurst();
+    setInterval(spawnBurst, 1400);
+
+    // ===== Step form =====
+    const step1 = $("step1");
+    const step2 = $("step2");
+    const d1 = $("d1");
+    const d2 = $("d2");
+
+    $("btnNext").addEventListener("click", ()=>{
+      const name = safeText($("name").value);
+      if(!name){
+        $("name").focus();
+        return;
+      }
+      blurAll(); // close keyboard
+      step1.classList.add("hide");
+      step2.classList.remove("hide");
+      d1.classList.remove("on");
+      d2.classList.add("on");
+      setTimeout(()=> $("mobile").focus(), 180);
+    });
+
+    $("btnBack").addEventListener("click", ()=>{
+      blurAll();
+      step2.classList.add("hide");
+      step1.classList.remove("hide");
+      d2.classList.remove("on");
+      d1.classList.add("on");
+      setTimeout(()=> $("name").focus(), 120);
+    });
+
+    // Close keyboard when user presses Enter
+    $("name").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter"){ e.preventDefault(); $("btnNext").click(); }
+    });
+    $("mobile").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter"){ e.preventDefault(); $("btnMake").click(); }
+    });
+
+    // ===== Link build + share =====
+    // Your Google Apps Script WebApp URL (KEEP SAME IF YOU ALREADY HAVE ONE)
+    // IMPORTANT: replace below with your existing deployed URL.
+    const SHEET_WEBAPP_URL = "PASTE_YOUR_WEBAPP_URL_HERE";
+
+    function buildLink(name){
+      const base = location.origin + location.pathname;
+      const url = new URL(base, location.href);
+      url.searchParams.set("from", name);
+      return url.toString();
+    }
+
+    async function sendToSheet(name, mobile){
+      if(!SHEET_WEBAPP_URL || SHEET_WEBAPP_URL.includes("PASTE_YOUR_WEBAPP_URL_HERE")) return;
+      try{
+        await fetch(SHEET_WEBAPP_URL, {
+          method:"POST",
+          mode:"no-cors",
+          headers: {"Content-Type":"text/plain;charset=utf-8"},
+          body: JSON.stringify({
+            name: name,
+            mobile: mobile || "",
+            time: new Date().toLocaleString()
+          })
+        });
+      }catch(e){}
+    }
+
+    $("btnMake").addEventListener("click", async ()=>{
+      const name = safeText($("name").value);
+      if(!name){ $("name").focus(); return; }
+
+      let mobile = ($("mobile").value || "").toString().trim();
+      mobile = mobile.replace(/\D/g,"").slice(0,10);
+
+      blurAll();
+
+      // Send to sheet (name + mobile) but mobile not shown to viewers
+      sendToSheet(name, mobile);
+
+      const link = buildLink(name);
+      $("shareLink").value = link;
+
+      $("panelForm").classList.add("hide");
+      $("panelShare").classList.remove("hide");
+    });
+
+    $("btnAgain").addEventListener("click", ()=>{
+      $("panelShare").classList.add("hide");
+      $("panelForm").classList.remove("hide");
+      step2.classList.add("hide");
+      step1.classList.remove("hide");
+      d2.classList.remove("on");
+      d1.classList.add("on");
+      $("name").value = "";
+      $("mobile").value = "";
+      setTimeout(()=> $("name").focus(), 160);
+    });
+
+    $("btnCopy").addEventListener("click", async ()=>{
+      try{
+        await navigator.clipboard.writeText($("shareLink").value);
+        $("btnCopy").textContent = "✅ Copied";
+        setTimeout(()=> $("btnCopy").textContent = "📋 Copy", 1200);
+      }catch(e){
+        $("shareLink").select();
+        document.execCommand("copy");
+      }
+    });
+
+    $("btnShare").addEventListener("click", async ()=>{
+      const link = $("shareLink").value;
+      const name = safeText($("name").value) || "आपके दोस्त";
+      const msg = `🙏 ${name} की तरफ से महाशिवरात्रि की शुभकामनाएं 🔱\n\nयह लिंक खोलें:\n${link}`;
+      if(navigator.share){
+        try{
+          await navigator.share({title:"महाशिवरात्रि शुभकामना", text: msg, url: link});
+          return;
+        }catch(e){}
+      }
+      // fallback
+      try{ await navigator.clipboard.writeText(msg); }catch(e){}
+      alert("Share supported नहीं है। Message copy हो गया है — अब WhatsApp/Message में paste कर दें।");
+    });
+
+    // ===== Greeting view when opened via shared link =====
+    const params = new URLSearchParams(location.search);
+    const from = safeText(params.get("from"));
+
+    if(from){
+      animateName();
+      $("panelForm").classList.add("hide");
+      $("panelShare").classList.add("hide");
+      $("panelGreeting").classList.remove("hide");
+      $("fromName").textContent = from;
+
+      // extra celebration burst on open
+      for(let i=0;i<10;i++) spawnBurst();
+    }
+
+    $("btnCreateMine").addEventListener("click", ()=>{
+      history.replaceState({}, "", location.pathname);
+      $("panelGreeting").classList.add("hide");
+      $("panelForm").classList.remove("hide");
+      setTimeout(()=> $("name").focus(), 180);
+    });
+
+    // ===== Music toggle =====
+    const bgm = $("bgm");
+    const knob = $("knob");
+    const musicState = $("musicState");
+    let isOn = false;
+
+    function setMusic(on){
+      isOn = on;
+      if(on){
+        knob.classList.add("on");
+        musicState.textContent = "ON";
+        bgm.volume = .55;
+        bgm.play().catch(()=>{});
+      }else{
+        knob.classList.remove("on");
+        musicState.textContent = "OFF";
+        try{ bgm.pause(); }catch(e){}
+      }
+    }
+
+    $("toggleMusic").addEventListener("click", ()=>{
+      setMusic(!isOn);
+    });
+
+    // Start off
+    setMusic(false);
+
+  </script>
+</body>
+</html>
