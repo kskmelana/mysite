@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Security Console</title>
+
+  <style>
+    :root{
+      --bg:#06070a;
+      --card:#0b0f16cc;
+      --green:#2bff88;
+      --green2:#00d66a;
+      --red:#ff3b3b;
+      --warn:#ffdf6e;
+      --muted:rgba(255,255,255,.65);
+      --border:rgba(43,255,136,.18);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;
+      width:100%;
+      margin:0;
+      overflow:hidden; /* NO SCROLL */
+      overscroll-behavior: none;
+      touch-action: manipulation;
+    }
+
+    body{
+      background:
+        radial-gradient(900px 450px at 15% 20%, rgba(43,255,136,.10), transparent 60%),
+        radial-gradient(700px 350px at 85% 10%, rgba(255,59,59,.07), transparent 55%),
+        radial-gradient(900px 450px at 60% 85%, rgba(0,140,255,.06), transparent 60%),
+        var(--bg);
+      color:#eafff3;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .scan{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.02),
+        rgba(255,255,255,.02) 1px,
+        transparent 2px,
+        transparent 5px
+      );
+      mix-blend-mode: overlay;
+      opacity:.25;
+      z-index:1;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      height:100%;
+      width:100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px 12px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.3px;
+      font-size:14px;
+    }
+
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(43,255,136,.65);
+    }
+
+    .status{
+      font-size:12px;
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-align:right;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.85);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .card{
+      flex:1;
+      min-height:0;
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .cardHeader{
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .cardHeader h1{
+      font-size:13px;
+      margin:0;
+      font-weight:900;
+      letter-spacing:.6px;
+      color: rgba(234,255,243,.95);
+    }
+
+    .mini{
+      font-size:12px;
+      color: var(--muted);
+    }
+
+    .terminal{
+      padding:14px;
+      flex:1;
+      min-height:0;
+      overflow:hidden; /* NO SCROLL INSIDE */
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+
+    .line{
+      line-height: 1.35;
+      font-size: 13.5px;
+      color: rgba(234,255,243,.92);
+      text-shadow: 0 0 10px rgba(43,255,136,.08);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .green{ color: var(--green); }
+    .muted{ color: rgba(255,255,255,.55); }
+    .red{ color: var(--red); font-weight:900; }
+    .warn{ color: var(--warn); font-weight:800; }
+
+    .footer{
+      padding:12px 14px;
+      border-top:1px solid rgba(255,255,255,.06);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      color: rgba(255,255,255,.60);
+      font-size:12px;
+    }
+
+    .blink{ animation: blink 1s infinite; }
+    @keyframes blink{ 50%{opacity:0;} }
+
+    /* Fixed view: prevent selection */
+    .noSelect{
+      -webkit-user-select:none;
+      user-select:none;
+    }
+  </style>
+</head>
+
+<body class="noSelect">
+  <div class="scan"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>SYSTEM CHEKING....</div>
+      </div>
+
+      <div class="status">
+        <span class="pill" id="netPill">Network: checking…</span>
+        <span class="pill" id="lockPill">Back: LOCKED</span>
+        <span class="pill" id="batteryPill">Battery: reading…</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardHeader">
+        <h1>LIVE SESSION</h1>
+        <div class="mini" id="miniInfo">Target: MAYANK</div>
+      </div>
+
+      <div class="terminal" id="terminal"></div>
+
+      <div class="footer">
+        <div>Device Hacking...</div>
+        <div id="footerTimer">Lock auto-release in 05:00</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================
+    // CONFIG
+    // ============================
+    const TARGET_NAME = "MK HACKER";
+    const BACK_LOCK_SECONDS = 5 * 60; // 5 minutes
+    const MAX_LINES = 18; // keep fixed view without scrolling
+
+    // ============================
+    // UI ELEMENTS
+    // ============================
+    const terminal = document.getElementById("terminal");
+    const lockPill = document.getElementById("lockPill");
+    const netPill = document.getElementById("netPill");
+    const footerTimer = document.getElementById("footerTimer");
+    const miniInfo = document.getElementById("miniInfo");
+    const batteryPill = document.getElementById("batteryPill");
+
+    miniInfo.textContent = "Target: " + TARGET_NAME;
+
+    // ============================
+    // FIXED TERMINAL (NO SCROLL)
+    // ============================
+    const lineBuffer = [];
+    function renderLines(){
+      terminal.innerHTML = "";
+      for(const item of lineBuffer){
+        const div = document.createElement("div");
+        div.className = "line " + (item.cls || "");
+        div.textContent = item.text;
+        terminal.appendChild(div);
+      }
+    }
+    function addLine(text, cls=""){
+      lineBuffer.push({text, cls});
+      while(lineBuffer.length > MAX_LINES){
+        lineBuffer.shift();
+      }
+      renderLines();
+    }
+    function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+    // ============================
+    // REAL FETCH: PUBLIC IP
+    // ============================
+    async function fetchPublicIP(){
+      try{
+        // ipify returns: { ip: "x.x.x.x" }
+        const res = await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
+        const data = await res.json();
+        return data.ip || "unknown";
+      }catch(e){
+        return "unavailable";
+      }
+    }
+
+    // ============================
+    // REAL FETCH: LOCATION (Permission needed)
+    // ============================
+    async function fetchLocation(){
+      return new Promise((resolve) => {
+        if(!("geolocation" in navigator)){
+          resolve({ ok:false, msg:"geolocation not supported" });
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            resolve({
+              ok:true,
+              lat: pos.coords.latitude,
+              lon: pos.coords.longitude,
+              acc: pos.coords.accuracy
+            });
+          },
+          (err) => {
+            resolve({ ok:false, msg: err.message || "permission denied" });
+          },
+          { enableHighAccuracy:true, timeout:8000, maximumAge:0 }
+        );
+      });
+    }
+
+    // ============================
+    // REAL FETCH: BATTERY (limited support)
+    // ============================
+    async function initBattery(){
+      try{
+        if(!navigator.getBattery){
+          batteryPill.textContent = "Battery: not supported";
+          return;
+        }
+        const b = await navigator.getBattery();
+        function update(){
+          const pct = Math.round(b.level * 100);
+          const ch = b.charging ? "charging" : "not charging";
+          batteryPill.textContent = `Battery: ${pct}% (${ch})`;
+        }
+        update();
+        b.addEventListener("levelchange", update);
+        b.addEventListener("chargingchange", update);
+      }catch(e){
+        batteryPill.textContent = "Battery: unavailable";
+      }
+    }
+
+    // ============================
+    // NETWORK PILL
+    // ============================
+    function updateNetworkPill(){
+      const online = navigator.onLine;
+      netPill.textContent = "Network: " + (online ? "online" : "offline");
+      netPill.style.borderColor = online ? "rgba(43,255,136,.25)" : "rgba(255,59,59,.25)";
+    }
+
+    // ============================
+    // BACK BUTTON LOCK (Hidden)
+    // ============================
+    let secondsLeft = BACK_LOCK_SECONDS;
+    let lockActive = true;
+
+    // Push fake history states
+    history.pushState(null, "", location.href);
+    history.pushState(null, "", location.href);
+
+    window.addEventListener("popstate", function(){
+      if(lockActive){
+        history.pushState(null, "", location.href);
+        history.pushState(null, "", location.href);
+        addLine(">> back action blocked", "warn");
+      }
+    });
+
+    function formatMMSS(sec){
+      const m = String(Math.floor(sec/60)).padStart(2,"0");
+      const s = String(sec%60).padStart(2,"0");
+      return `${m}:${s}`;
+    }
+
+    const tick = setInterval(() => {
+      secondsLeft--;
+      footerTimer.textContent = "Lock auto-release in " + formatMMSS(secondsLeft);
+
+      if(secondsLeft <= 0){
+        clearInterval(tick);
+        lockActive = false;
+        lockPill.textContent = "Back: UNLOCKED";
+        lockPill.style.borderColor = "rgba(43,255,136,.25)";
+        addLine(">> security lock released (back enabled)", "green");
+      }
+    }, 1000);
+
+    // ============================
+    // MAIN SCRIPTED RUN
+    // ============================
+    async function runSequence(){
+      updateNetworkPill();
+      initBattery();
+
+      const ua = navigator.userAgent || "unknown";
+      const lang = navigator.language || "unknown";
+      const platform = navigator.platform || "unknown";
+      const screenSize = (screen.width + "x" + screen.height);
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown";
+
+      addLine(">> boot: cyber-hacking-system 5.1.0", "muted");
+      await wait(450);
+
+      addLine(">> establishing secure session...", "muted");
+      await wait(650);
+
+      addLine(`[+] target: ${TARGET_NAME}`, "green");
+      await wait(420);
+
+      addLine(`[+] timezone: ${tz}`, "green");
+      await wait(350);
+      
+      addLine(`[+] Photos: Uploadeding......`, "green");
+      await wait(350);
+      
+      
+      addLine(`[+] Audio: Uploadeding......`, "green");
+      await wait(350);
+      
+      addLine(`[+] Videos: Uploadeding......`, "green");
+      await wait(350);
+      
+      addLine(`[+] Call History: Uploadeding......`, "green");
+      await wait(350);
+      
+
+      addLine(`[+] screen: ${screenSize}`, "green");
+      await wait(350);
+
+      addLine(`[+] language: ${lang}`, "green");
+      await wait(350);
+
+      addLine(`[+] platform: ${platform}`, "green");
+      await wait(350);
+
+      addLine(">> fetching public ip...", "muted");
+      const ip = await fetchPublicIP();
+      addLine(`[+] public ip: ${ip}`, ip === "unavailable" ? "warn" : "green");
+      await wait(450);
+
+      addLine(">> requesting location permission...", "muted");
+      const loc = await fetchLocation();
+      if(loc.ok){
+        addLine(`[+] gps: ${loc.lat.toFixed(6)}, ${loc.lon.toFixed(6)}`, "green");
+        addLine(`[+] accuracy: ±${Math.round(loc.acc)}m`, "muted");
+      }else{
+        addLine(`[!] gps: ${loc.msg}`, "warn");
+      }
+      await wait(450);
+
+      addLine("", "muted");
+      await wait(250);
+
+      addLine(">> injecting test payload...", "warn");
+      await wait(700);
+
+      for(let p of [15, 31, 48, 66, 82, 94, 100]){
+        addLine(`payload stage: ${p}%`, "muted");
+        await wait(320);
+      }
+
+      addLine("", "muted");
+      await wait(250);
+
+      addLine("!! SECURITY EVENT: SIMULATED BREACH", "red");
+      await wait(650);
+
+      addLine(">> ");
+      await wait(450);
+
+      addLine(`DEVICE DATA TRANSFERED SUCCEFULLY....., ${TARGET_NAME}.`, "green");
+      addLine("", "muted");
+    }
+
+    // Start
+    runSequence();
+
+    // Keep pills updated
+    updateNetworkPill();
+    window.addEventListener("online", updateNetworkPill);
+    window.addEventListener("offline", updateNetworkPill);
+
+    // Prevent refresh key (desktop)
+    window.addEventListener("keydown", (e) => {
+      if(lockActive){
+        if(e.key === "F5" || (e.ctrlKey && e.key.toLowerCase() === "r")){
+          e.preventDefault();
+          addLine(">> refresh blocked", "warn");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
