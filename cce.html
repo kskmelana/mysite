@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>भू-नक्शा CCE कैलकुलेटर</title>
+
+  <style>
+    :root{
+      --bg:#f6f8ff;
+      --card:#ffffff;
+      --blue:#1e66ff;
+      --red:#ff2d2d;
+      --txt:#111;
+      --muted:#666;
+    }
+
+    *{ box-sizing:border-box; }
+
+    html, body{
+      margin:0;
+      padding:0;
+      height:100%;
+      overflow:hidden; /* 🚫 no scroll */
+      background:var(--bg);
+      font-family: system-ui, Arial, sans-serif;
+      color:var(--txt);
+    }
+
+    .app{
+      height:100vh;
+      width:100vw;
+      display:flex;
+      flex-direction:column;
+      padding:10px;
+      gap:10px;
+    }
+
+    .topbar{
+      background:var(--card);
+      border:1px solid rgba(0,0,0,0.08);
+      border-radius:16px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex: 0 0 auto;
+    }
+
+    .title{
+      font-weight:900;
+      font-size:16px;
+      line-height:1.1;
+    }
+    .sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:900;
+      font-size:13px;
+      background:#eef1ff;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn.primary{ background:#5166ff; color:white; }
+    .btn.danger{ background:#ffecec; color:#b40000; }
+
+    .mid{
+      flex: 1 1 auto;
+      min-height:0; /* important for no scroll */
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid rgba(0,0,0,0.08);
+      border-radius:16px;
+      padding:10px;
+      flex: 0 0 auto;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:6px;
+      color:#222;
+    }
+
+    input[type="number"], input[type="file"]{
+      width:100%;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid #ddd;
+      font-size:14px;
+      outline:none;
+      background:#fafafa;
+    }
+
+    .modes{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+    .modeBtn{
+      flex:1;
+      border:none;
+      border-radius:14px;
+      padding:10px;
+      font-weight:900;
+      font-size:14px;
+      background:#e9ecff;
+      cursor:pointer;
+    }
+    .modeBtn.active{
+      background:#5166ff;
+      color:#fff;
+    }
+
+    .canvasWrap{
+      flex: 1 1 auto;
+      min-height:0;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,0.12);
+      background:#111;
+      position:relative;
+    }
+    canvas{
+      width:100%;
+      height:100%;
+      display:block;
+      touch-action:none;
+      background:#111;
+    }
+
+    .tip{
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:10px;
+      background:rgba(0,0,0,0.55);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:12px;
+      line-height:1.35;
+      backdrop-filter: blur(6px);
+    }
+
+    .result{
+      background:var(--card);
+      border:1px solid rgba(0,0,0,0.08);
+      border-radius:16px;
+      padding:10px;
+      flex: 0 0 auto;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:7px 0;
+      border-bottom:1px dashed rgba(0,0,0,0.08);
+      font-size:13px;
+    }
+    .row:last-child{ border-bottom:none; }
+    .val{ font-weight:900; }
+
+    .miniBtns{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .badge{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#f1f5ff;
+      border:1px solid #d7e0ff;
+      font-weight:900;
+      color:#2a3cff;
+      margin-left:8px;
+    }
+
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:6px;
+      line-height:1.35;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div>
+      <div class="title">भू-नक्शा CCE कैलकुलेटर <span class="badge">1 कदम = 0.75m</span></div>
+      <div class="sub">हेक्टेयर डालें → लंबाई 2 पॉइंट → चौड़ाई 2 पॉइंट</div>
+    </div>
+    <button class="btn danger" id="btnReset">Reset</button>
+  </div>
+
+  <div class="mid">
+
+    <!-- Inputs -->
+    <div class="panel">
+      <div class="grid">
+        <div>
+          <label>Screenshot Upload</label>
+          <input id="file" type="file" accept="image/*" />
+        </div>
+        <div>
+          <label>खेत का एरिया (हेक्टेयर)</label>
+          <input id="haInput" type="number" inputmode="decimal" step="0.0001" placeholder="उदाहरण: 1.7100" />
+        </div>
+      </div>
+
+      <div class="modes">
+        <button class="modeBtn active" id="btnLen">लंबाई (2 पॉइंट)</button>
+        <button class="modeBtn" id="btnWid">चौड़ाई (2 पॉइंट)</button>
+      </div>
+
+      <div class="miniBtns">
+        <button class="btn" id="btnUndo">Undo</button>
+        <button class="btn primary" id="btnAuto">Calculate</button>
+      </div>
+
+      <div class="small">
+        ✅ Tips: लंबाई हमेशा बड़ी रखी जाएगी (Auto Swap).<br>
+        ✅ कदम Rounded होकर दिखेंगे (जैसे 165.7 → 166).
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <div class="canvasWrap">
+      <canvas id="cv"></canvas>
+      <div class="tip" id="tip">
+        1) फोटो अपलोड करें<br>
+        2) हेक्टेयर डालें<br>
+        3) लंबाई के 2 पॉइंट क्लिक करें<br>
+        4) चौड़ाई के 2 पॉइंट क्लिक करें
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="result">
+      <div class="row"><div>लंबाई (मीटर)</div><div class="val" id="outLenM">0</div></div>
+      <div class="row"><div>चौड़ाई (मीटर)</div><div class="val" id="outWidM">0</div></div>
+
+      <div class="row"><div>लंबाई (कदम)</div><div class="val" id="outLenS">0</div></div>
+      <div class="row"><div>चौड़ाई (कदम)</div><div class="val" id="outWidS">0</div></div>
+
+      <div class="row"><div>एरिया (m²)</div><div class="val" id="outSqm">0</div></div>
+      <div class="row"><div>एरिया (हेक्टेयर)</div><div class="val" id="outHa">0</div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // FIXED
+  const STEP_METER = 0.75;
+
+  // Elements
+  const file = document.getElementById("file");
+  const haInput = document.getElementById("haInput");
+
+  const cv = document.getElementById("cv");
+  const ctx = cv.getContext("2d");
+
+  const btnLen = document.getElementById("btnLen");
+  const btnWid = document.getElementById("btnWid");
+  const btnUndo = document.getElementById("btnUndo");
+  const btnReset = document.getElementById("btnReset");
+  const btnAuto = document.getElementById("btnAuto");
+
+  const tip = document.getElementById("tip");
+
+  // Outputs
+  const outLenM = document.getElementById("outLenM");
+  const outWidM = document.getElementById("outWidM");
+  const outLenS = document.getElementById("outLenS");
+  const outWidS = document.getElementById("outWidS");
+  const outSqm = document.getElementById("outSqm");
+  const outHa = document.getElementById("outHa");
+
+  // State
+  let img = new Image();
+  let imgLoaded = false;
+  let mode = "len";
+
+  // 2 points each
+  let lenPoints = [];
+  let widPoints = [];
+
+  function setMode(m){
+    mode = m;
+    btnLen.classList.toggle("active", mode === "len");
+    btnWid.classList.toggle("active", mode === "wid");
+    tip.innerHTML = (mode === "len")
+      ? "लंबाई मोड: खेत की सबसे लंबी दिशा में 2 पॉइंट लगाएँ"
+      : "चौड़ाई मोड: खेत की चौड़ाई दिशा में 2 पॉइंट लगाएँ";
+  }
+
+  btnLen.onclick = () => setMode("len");
+  btnWid.onclick = () => setMode("wid");
+
+  btnReset.onclick = () => {
+    lenPoints = [];
+    widPoints = [];
+    haInput.value = "";
+    update();
+    tip.innerHTML = "Reset हो गया। अब फोटो अपलोड करें और हेक्टेयर डालें।";
+  };
+
+  btnUndo.onclick = () => {
+    if(mode === "len" && lenPoints.length > 0) lenPoints.pop();
+    if(mode === "wid" && widPoints.length > 0) widPoints.pop();
+    update();
+  };
+
+  // Image load
+  file.addEventListener("change", (e) => {
+    const f = e.target.files?.[0];
+    if(!f) return;
+
+    const url = URL.createObjectURL(f);
+    img = new Image();
+    img.onload = () => {
+      imgLoaded = true;
+
+      // set canvas size to match image for accurate coordinate system
+      cv.width = img.naturalWidth;
+      cv.height = img.naturalHeight;
+
+      // clear points
+      lenPoints = [];
+      widPoints = [];
+
+      tip.innerHTML = "फोटो लोड हो गई। अब हेक्टेयर डालें और पॉइंट लगाएँ।";
+      update();
+    };
+    img.src = url;
+  });
+
+  function getCanvasPos(evt){
+    const rect = cv.getBoundingClientRect();
+    const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+    const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
+    const x = (clientX - rect.left) * (cv.width / rect.width);
+    const y = (clientY - rect.top) * (cv.height / rect.height);
+    return {x, y};
+  }
+
+  function dist(a,b){
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+    return Math.sqrt(dx*dx + dy*dy);
+  }
+
+  function drawPoint(p, color){
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 10, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+  }
+
+  function drawLine(a,b,color){
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+  }
+
+  function fmt(n, d=2){
+    if(!isFinite(n) || n <= 0) return "0";
+    return Number(n).toFixed(d);
+  }
+
+  function calc(){
+    const ha = parseFloat(haInput.value);
+    if(!isFinite(ha) || ha <= 0) return null;
+
+    if(lenPoints.length < 2 || widPoints.length < 2) return null;
+
+    // Pixel distances
+    const lp = dist(lenPoints[0], lenPoints[1]);
+    const wp = dist(widPoints[0], widPoints[1]);
+
+    if(lp <= 0 || wp <= 0) return null;
+
+    // Ratio from map
+    const ratio = lp / wp; // length/width ratio
+
+    // Real area from input
+    const areaSqm = ha * 10000;
+
+    // Solve:
+    // area = L * W
+    // L = ratio * W
+    // => area = ratio * W^2
+    // => W = sqrt(area/ratio)
+    const Wm = Math.sqrt(areaSqm / ratio);
+    const Lm = ratio * Wm;
+
+    // Steps
+    const Lsteps = Lm / STEP_METER;
+    const Wsteps = Wm / STEP_METER;
+
+    // 🔥 Auto Swap (length always bigger)
+    // If width is bigger, swap everything
+    if(Wm > Lm){
+      return {
+        ha,
+        areaSqm,
+        Lm: Wm,
+        Wm: Lm,
+        Lsteps: Wsteps,
+        Wsteps: Lsteps,
+        ratio: 1/ratio
+      };
+    }
+
+    return {
+      ha,
+      areaSqm,
+      Lm, Wm,
+      Lsteps, Wsteps,
+      ratio
+    };
+  }
+
+  function update(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+
+    if(imgLoaded){
+      ctx.drawImage(img, 0, 0);
+    } else {
+      // placeholder
+      cv.width = 800;
+      cv.height = 500;
+      ctx.fillStyle = "#111";
+      ctx.fillRect(0,0,cv.width,cv.height);
+      ctx.fillStyle = "#fff";
+      ctx.font = "28px system-ui";
+      ctx.fillText("Screenshot Upload करें", 40, 80);
+      return;
+    }
+
+    // Draw length (red)
+    if(lenPoints.length === 2){
+      drawLine(lenPoints[0], lenPoints[1], "#ff2d2d");
+      drawPoint(lenPoints[0], "#ff2d2d");
+      drawPoint(lenPoints[1], "#ff2d2d");
+    } else {
+      lenPoints.forEach(p => drawPoint(p, "#ff2d2d"));
+    }
+
+    // Draw width (blue)
+    if(widPoints.length === 2){
+      drawLine(widPoints[0], widPoints[1], "#1e66ff");
+      drawPoint(widPoints[0], "#1e66ff");
+      drawPoint(widPoints[1], "#1e66ff");
+    } else {
+      widPoints.forEach(p => drawPoint(p, "#1e66ff"));
+    }
+
+    // Live results
+    const r = calc();
+    if(!r){
+      outLenM.textContent = "0";
+      outWidM.textContent = "0";
+      outLenS.textContent = "0";
+      outWidS.textContent = "0";
+      outSqm.textContent = "0";
+      outHa.textContent = "0";
+      return;
+    }
+
+    // Rounded steps display
+    const lenStepsRounded = Math.round(r.Lsteps);
+    const widStepsRounded = Math.round(r.Wsteps);
+
+    outLenM.textContent = fmt(r.Lm, 2) + " m";
+    outWidM.textContent = fmt(r.Wm, 2) + " m";
+
+    outLenS.textContent = lenStepsRounded + " कदम";
+    outWidS.textContent = widStepsRounded + " कदम";
+
+    outSqm.textContent = fmt(r.areaSqm, 2) + " m²";
+    outHa.textContent = fmt(r.ha, 4) + " ha";
+  }
+
+  function addPoint(pos){
+    if(!imgLoaded) return;
+
+    if(mode === "len"){
+      if(lenPoints.length >= 2) lenPoints = [];
+      lenPoints.push(pos);
+    } else {
+      if(widPoints.length >= 2) widPoints = [];
+      widPoints.push(pos);
+    }
+    update();
+  }
+
+  // Click & Touch
+  cv.addEventListener("click", (evt) => addPoint(getCanvasPos(evt)));
+  cv.addEventListener("touchstart", (evt) => {
+    evt.preventDefault();
+    addPoint(getCanvasPos(evt));
+  }, {passive:false});
+
+  // Calculate button
+  btnAuto.onclick = () => {
+    update();
+    tip.innerHTML = "कैल्कुलेशन हो गया। अब रिजल्ट नीचे देखो।";
+  };
+
+  // Update on hectare typing
+  haInput.addEventListener("input", update);
+
+  // Default
+  setMode("len");
+  update();
+</script>
+
+</body>
+</html>
